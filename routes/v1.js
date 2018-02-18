@@ -1,5 +1,6 @@
 var Router = require('express').Router;
 var elasticsearch = require('elasticsearch');
+var request = require('request');
 
 const all = require('predicates').all;
 const any = require('predicates').any;
@@ -397,6 +398,11 @@ function addRoutes(app, peliasConfig) {
       postProc.geocodeJSON(peliasConfig.api, base),
       postProc.sendJSON
     ]),
+      // lib postal proxy required to connect to libpostal rest docker image
+    libpostal: createRouter([
+
+        ]
+    ),
     status: createRouter([
       controllers.status
     ])
@@ -417,6 +423,28 @@ function addRoutes(app, peliasConfig) {
   app.get ( base + 'search/structured',    routers.structured );
   app.get ( base + 'reverse',              routers.reverse );
   app.get ( base + 'nearby',               routers.nearby );
+
+  app.get ( base + 'libpostal/parse',function (req, res) {
+    var address = req.query.address || null;
+    var data = {query: address};
+      var clientServerOptions = {
+          uri: 'http://ec2-52-63-98-25.ap-southeast-2.compute.amazonaws.com:8080/parser',
+          body: JSON.stringify(data),
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json'
+          }
+      }
+      var respData ;
+      request(clientServerOptions, function (error, response) {
+          console.log(error,response.body);
+          respData = response.body;
+          res.setHeader('content-type', 'application/json');
+          res.send(respData);
+          return;
+      });
+
+  } );
 
 }
 
