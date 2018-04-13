@@ -88,7 +88,7 @@ function addMessages(req, msgType, geocoding) {
 function addEngine(version, geocoding) {
   geocoding.engine = {
     name: 'Pelias',
-    author: 'Mapzen',
+    author: 'Mapzen, DPTI',
     version: version
   };
 }

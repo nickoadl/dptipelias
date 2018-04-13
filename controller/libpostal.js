@@ -9,6 +9,7 @@ var field_mapping = {
   island:         'island',
   category:       'category',
   house:          'query',
+  unit:           'unit',
   house_number:   'number',
   road:           'street',
   suburb:         'neighbourhood',
@@ -77,6 +78,17 @@ function setup(libpostalService, should_execute) {
       if (err) {
         // push err.message or err onto req.errors
         req.errors.push( _.get(err, 'message', err) );
+        //return next();
+          /*req.clean.parser = 'addressit';
+          req.clean.parsed_text = response.reduce(function(o, f) {
+              if (field_mapping.hasOwnProperty(f.label)) {
+                  o[field_mapping[f.label]] = f.value;
+              }
+
+              return o;
+          },{})*/
+          //return req.clean.parsed_text
+          //req.clean.parser = 'addressit';
 
       } else if (_.some(_.countBy(response, o => o.label), count => count > 1)) {
         logger.warn(`discarding libpostal parse of '${req.clean.text}' due to duplicate field assignments`);

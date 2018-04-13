@@ -16,6 +16,17 @@ function findHouseNumberField(response) {
 
 }
 
+function findUnitField(response) {
+    const unit_field = response.find(f => f.label === 'unit');
+
+    if (unit_field) {
+        return unit_field;
+    }
+
+    return null;
+
+}
+
 function setup(libpostalService, should_execute) {
   function controller( req, res, next ){
     // bail early if req/res don't pass conditions for execution
@@ -35,6 +46,12 @@ function setup(libpostalService, should_execute) {
         // libpostal parses some inputs, like `3370 cobbe ave`, as a postcode+street
         // so because we're treating the entire field as a street address, it's safe
         // to assume that an identified postcode is actually a house number.
+
+        const unit_field = findUnitField(response);
+        if (unit_field) {
+          req.clean.parsed_text.unit = unit_field.value;
+        }
+
         const house_number_field = findHouseNumberField(response);
 
         // if we're fairly certain that libpostal identified a house number
@@ -47,6 +64,7 @@ function setup(libpostalService, should_execute) {
 
           // remove the first instance of the number and trim whitespace
           req.clean.parsed_text.street = _.trim(_.replace(req.clean.parsed_text.address, req.clean.parsed_text.number, ''));
+          req.clean.parsed_text.street = _.trim(_.replace(req.clean.parsed_text.street, req.clean.parsed_text.unit, ''));
 
         } else {
           // otherwise no house number was identifiable, so treat the entire input
@@ -54,10 +72,8 @@ function setup(libpostalService, should_execute) {
           req.clean.parsed_text.street = req.clean.parsed_text.address;
 
         }
-
         // the address field no longer means anything since it's been parsed, so remove it
         delete req.clean.parsed_text.address;
-
         debugLog.push(req, {parsed_text: response});
 
       }

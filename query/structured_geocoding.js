@@ -12,6 +12,8 @@ const structuredQuery = new peliasQuery.layout.StructuredFallbackQuery();
 structuredQuery.score( peliasQuery.view.focus_only_function( peliasQuery.view.phrase ) );
 structuredQuery.score( peliasQuery.view.popularity_only_function );
 structuredQuery.score( peliasQuery.view.population_only_function );
+// added unit - dpti nw
+structuredQuery.score( peliasQuery.view.address('unit') );
 // --------------------------------
 
 // non-scoring hard filters
@@ -43,6 +45,12 @@ function generateQuery( clean ){
   // size
   if( clean.querySize ) {
     vs.var( 'size', clean.querySize );
+  }
+
+  if(check.string(clean.parsed_text.unit)) {
+      vs.set({
+          'address.unit': clean.parsed_text.unit
+      })
   }
 
   // focus point

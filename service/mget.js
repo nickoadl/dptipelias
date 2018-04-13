@@ -19,7 +19,8 @@ function service( esclient, query, cb ){
   var cmd = {
     body: {
       docs: query
-    }
+    }//,
+    //type:'gazetteer'
   };
 
   // query elasticsearch

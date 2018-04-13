@@ -46,7 +46,8 @@ function generateQuery( clean ){
   // layers
   if( check.array(clean.layers) && clean.layers.length ) {
     // only include non-coarse layers
-    vs.var( 'layers', _.intersection(clean.layers, ['address', 'street', 'venue']));
+    //vs.var( 'layers', _.intersection(clean.layers, ['address', 'street', 'venue']));
+    vs.var( 'layers', _.intersection(clean.layers, ['address']));
     logStr += '[param:layers] ';
   }
 

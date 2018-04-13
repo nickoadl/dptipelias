@@ -2,10 +2,16 @@
 
 const peliasQuery = require('pelias-query');
 const defaults = require('./autocomplete_defaults');
-const textParser = require('./text_parser_addressit');
+//const textParser = require('./text_parser_addressit');
+const textParser = require('./text_parser_libpostal');
 //const textParser = require('./text_parser');
 const check = require('check-types');
 const logger = require('pelias-logger').get('api');
+
+const os = require('os');
+console.log("home - " + os.homedir());
+//var testNW = require('test-nw');
+//console.log(testNW.testNW());
 
 // additional views (these may be merged in to pelias/query at a later date)
 var views = {
@@ -28,20 +34,22 @@ query.score( views.ngrams_last_token_only, 'must' );
 query.score( peliasQuery.view.boundary_country, 'must' );
 
 // address components
+query.score( peliasQuery.view.address('unit') );
 query.score( peliasQuery.view.address('housenumber') );
 query.score( peliasQuery.view.address('street') );
 query.score( peliasQuery.view.address('postcode') );
 
 // admin components
-query.score( peliasQuery.view.admin('country') );
+/*query.score( peliasQuery.view.admin('country') );
 query.score( peliasQuery.view.admin('country_a') );
 query.score( peliasQuery.view.admin('region') );
 query.score( peliasQuery.view.admin('region_a') );
 query.score( peliasQuery.view.admin('county') );
 query.score( peliasQuery.view.admin('borough') );
 query.score( peliasQuery.view.admin('localadmin') );
-query.score( peliasQuery.view.admin('locality') );
+query.score( peliasQuery.view.admin('locality') );*/
 query.score( peliasQuery.view.admin('neighbourhood') );
+query.score( peliasQuery.view.admin('state') );
 
 // scoring boost
 query.score( views.boost_exact_matches );
@@ -61,6 +69,7 @@ query.filter( peliasQuery.view.boundary_rect );
   provided by this HTTP request.
 **/
 function generateQuery( clean ){
+  //testmd.testmdl();
 
   const vs = new peliasQuery.Vars( defaults );
 
@@ -78,6 +87,8 @@ function generateQuery( clean ){
     vs.var( 'layers', clean.layers);
     logStr += '[param:layers] ';
   }
+
+  //vs.var( 'layers', ['address','gazetteer']);
 
   // boundary country
   if( check.string(clean['boundary.country']) ){

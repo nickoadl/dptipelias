@@ -26,12 +26,28 @@ module.exports = function( subview ){
     var view = macroView( vs );
 
     if( view && view.hasOwnProperty('function_score') ){
-      view.function_score.filter = {
+      //Elasticsearch v 2*
+      /*view.function_score.filter = {
         'or': [
           { 'term': { 'layer': 'venue' } },
           { 'term': { 'layer': 'address' } }
         ]
-      };
+      };*/
+
+      // Elasticsearch v5*
+        view.function_score.functions.push(
+            {
+                "filter": { "match": { 'layer': 'gazetteer' } },
+                "weight": 10
+            }
+        );
+        /*view.function_score.functions.push(
+            {
+                "filter": { "match": { 'layer': 'address' } },
+                "weight": 10
+            }
+        );*/
+
     }
 
     return view;

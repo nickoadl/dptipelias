@@ -28,13 +28,17 @@ module.exports = _.merge({}, peliasQuery.defaults, {
   'phrase:slop': 3,
 
   'focus:function': 'linear',
-  'focus:offset': '0km',
+  'focus:offset': '0.5km',
   'focus:scale': '250km',
   'focus:decay': 0.5,
   'focus:weight': 15,
 
   'function_score:score_mode': 'avg',
   'function_score:boost_mode': 'replace',
+
+  'address:unit:analyzer': 'peliasHousenumber',
+  'address:unit:field': 'address_parts.unit',
+  'address:unit:boost': 2,
 
   'address:housenumber:analyzer': 'peliasHousenumber',
   'address:housenumber:field': 'address_parts.number',
@@ -45,7 +49,7 @@ module.exports = _.merge({}, peliasQuery.defaults, {
   'address:street:boost': 5,
 
   'address:postcode:analyzer': 'peliasZip',
-  'address:postcode:field': 'address_parts.zip',
+  'address:postcode:field': 'address_parts.postcode',
   'address:postcode:boost': 2000,
 
   'admin:country_a:analyzer': 'standard',
@@ -77,8 +81,12 @@ module.exports = _.merge({}, peliasQuery.defaults, {
   'admin:locality:boost': 200,
 
   'admin:neighbourhood:analyzer': 'peliasAdmin',
-  'admin:neighbourhood:field': 'parent.neighbourhood',
+  'admin:neighbourhood:field': 'address_parts.suburb',
   'admin:neighbourhood:boost': 200,
+
+    'admin:state:analyzer': 'peliasAdmin',
+    'admin:state:field': 'address_parts.state',
+    'admin:state:boost': 200,
 
   'admin:borough:analyzer': 'peliasAdmin',
   'admin:borough:field': 'parent.borough',

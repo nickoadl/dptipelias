@@ -48,7 +48,8 @@ function geojsonifyPlace(params, place) {
     source_id: place.source_id,
     bounding_box: place.bounding_box,
     lat: parseFloat(place.center_point.lat),
-    lng: parseFloat(place.center_point.lon)
+    lng: parseFloat(place.center_point.lon),
+    address_parts: place.address_parts
   };
 
   // assign name, logging a warning if it doesn't exist

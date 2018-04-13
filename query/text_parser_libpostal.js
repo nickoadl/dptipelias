@@ -36,6 +36,10 @@ function addParsedVariablesToQueryVariables( parsed_text, vs ){
 
   // ==== add parsed matches [address components] ====
 
+  if( parsed_text.hasOwnProperty('unit') ){
+      vs.var( 'input:unit', parsed_text.unit );
+  }
+
   // house number
   if( parsed_text.hasOwnProperty('number') ){
     vs.var( 'input:housenumber', parsed_text.number );
@@ -67,6 +71,15 @@ function addParsedVariablesToQueryVariables( parsed_text, vs ){
   if( parsed_text.hasOwnProperty('country') ){
     vs.var( 'input:country_a', parsed_text.country );
   }
+  // suburb
+    if( parsed_text.hasOwnProperty('neighbourhood') ){
+        vs.var( 'input:neighbourhood', parsed_text.neighbourhood );
+    }
+
+    // state
+    if( parsed_text.hasOwnProperty('state') ){
+        vs.var( 'input:state', parsed_text.state );
+    }
 
   // ==== deal with the 'leftover' components ====
   // @todo: clean up this code

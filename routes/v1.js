@@ -264,6 +264,7 @@ function addRoutes(app, peliasConfig) {
 
   var base = '/v1/';
 
+
   /** ------------------------- routers ------------------------- **/
 
   var routers = {
@@ -428,15 +429,28 @@ function addRoutes(app, peliasConfig) {
     var address = req.query.address || null;
     var data = {query: address};
       var clientServerOptions = {
-          uri: 'http://ec2-52-63-98-25.ap-southeast-2.compute.amazonaws.com:8080/parser',
+          uri: 'http://libpostalloadbalancer-2101794397.ap-southeast-2.elb.amazonaws.com:8080/parser',
           body: JSON.stringify(data),
           method: 'POST',
+          timeout:500,
           headers: {
               'Content-Type': 'application/json'
           }
       }
       var respData ;
       request(clientServerOptions, function (error, response) {
+          if(typeof error !== 'undefined'){
+             if(error!== null) {
+                 console.log("error fetching libpostal", error);
+
+                 /*res.status(404)        // HTTP status 404: NotFound
+                     .send('Not found');
+                 return;*/
+                 res.setHeader('content-type', 'application/json');
+                 res.send([]);
+                 return;
+             }
+          }
           console.log(error,response.body);
           respData = response.body;
           res.setHeader('content-type', 'application/json');

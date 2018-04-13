@@ -81,7 +81,7 @@ module.exports = _.merge({}, peliasQuery.defaults, {
   'admin:neighbourhood:field': 'parent.neighbourhood',
   'admin:neighbourhood:boost': 1,
 
-  'popularity:field': 'popularity',
+  /*'popularity:field': 'popularity',
   'popularity:modifier': 'log1p',
   'popularity:max_boost': 20,
   'popularity:weight': 1,
@@ -89,6 +89,6 @@ module.exports = _.merge({}, peliasQuery.defaults, {
   'population:field': 'population',
   'population:modifier': 'log1p',
   'population:max_boost': 20,
-  'population:weight': 2
+  'population:weight': 2*/
 
 });
