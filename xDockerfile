@@ -1,4 +1,8 @@
-FROM node:6
+# base image
+FROM pelias/baseimage
+
+# maintainer information
+LABEL maintainer="pelias.team@gmail.com"
 
 EXPOSE 3100
 
@@ -12,11 +16,8 @@ WORKDIR ${WORK}
 COPY . ${WORK}
 
 # Build and set permissions for arbitrary non-root user
-#RUN npm install && \
-  #npm test && \
-  #chmod -R a+rwX .
-
 RUN npm install && \
+  npm test && \
   chmod -R a+rwX .
 
 # Don't run as root, because there's no reason to (https://docs.docker.com/engine/articles/dockerfile_best-practices/#user).
